@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าหลัก - My card game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Kanit', sans-serif; margin: 0; background-color: #121212; color: white; }
+        .navbar { background-color: #222; color: white; padding: 1rem 50px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #333; }
+        .navbar .logo { font-size: 1.5rem; font-weight: bold; color: #ffc831; }
+        .nav-links { list-style: none; display: flex; gap: 20px; margin: 0; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; transition: 0.3s; font-size: 0.9rem; }
+        .nav-links a:hover { color: #ffc831; }
+        .profile-link { text-decoration: none; display: flex; align-items: center; transition: 0.2s; padding: 5px 15px; border-radius: 20px; background: rgba(255, 200, 49, 0.1); border: 1px solid rgba(255, 200, 49, 0.3); cursor: pointer; user-select: none; }
+        .nav-avatar { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #ffc831; margin-right: 10px; object-fit: cover; background: #333; }
+        .btn-blue { background: #2b52ff; padding: 8px 18px; border-radius: 5px; font-weight: 500; cursor: pointer; border: none; color: white; text-decoration: none; }
+        
+        .hero { height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; background-size: cover; background-position: center; animation: bgSlide 15s infinite; position: relative; }
+        .hero::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1; }
+        .hero h1, .hero p { position: relative; z-index: 2; }
+        .hero h1 { font-size: 3rem; margin-bottom: 10px; }
+
+        @keyframes bgSlide { 0%, 100% { background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREnu2Z4qwDqG2AuWKYP5_GkyFt5wG7MMtRYA&s'); } 33% { background-image: url('https://www.devsisters.com/_next/image?url=https%3A%2F%2Fdevsisters-branding-devhome-prod-files.s3.ap-northeast-1.amazonaws.com%2Fdata%2Fstory%2Fen%2F5%2F659f8f341c9ca.png&w=750&q=75'); } 66% { background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTSW3gxddPaBTmeJHmgKHBybpemXlbk6AFxbhHarSmzBoGW3DPynaJywMIsiT-XkRTtGg&usqp=CAU'); } }
+        
+        .container { max-width: 1100px; margin: 3rem auto; padding: 0 20px; }
+        h2 { border-left: 5px solid #ffc831; padding-left: 15px; margin-bottom: 25px; }
+
+        /* ส่วนเช็คอินรายวัน */
+        .daily-reward { background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%); padding: 30px; border-radius: 20px; border: 2px solid #ffc831; text-align: center; margin-bottom: 40px; display: none; }
+        .btn-spin { background: #ffc831; color: black; padding: 12px 30px; border-radius: 50px; border: none; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+        
+        /* แบนเนอร์ไปหน้าสุ่ม */
+        .quick-gacha-banner { background: linear-gradient(90deg, #ffc831, #ff8c00); border-radius: 15px; padding: 40px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; color: black; cursor: pointer; transition: 0.3s; }
+        .quick-gacha-banner:hover { transform: scale(1.02); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .card { background: #1e1e1e; border-radius: 12px; overflow: hidden; border: 1px solid #333; }
+        .card-img { width: 100%; height: 200px; object-fit: cover; }
+        
+        #adminPanel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a0000; border: 2px solid #ff4747; padding: 25px; border-radius: 20px; z-index: 9999; width: 320px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Mycard game</div>
+        <ul class="nav-links">
+            <li><a href="index.html">หน้าแรก</a></li>
+            <li><a href="collection.html">📖 สมุดสะสม</a></li>
+            <li id="redeem-tab" style="display: none;"><a href="redeem.html" style="color: #ffc831; font-weight: bold;">🎫 แลกโค้ด</a></li>
+            <li>
+                <div class="profile-link" id="profile-container" style="display: none;">
+                    <img src="" id="nav-avatar-img" class="nav-avatar">
+                    <span id="user-display" style="color: #ffc831; font-weight: bold;"></span>
+                </div>
+            </li>
+            <li><a href="login.html" id="auth-btn" class="btn-blue">เข้าสู่ระบบ</a></li>
+            <li id="reg-item"><a href="registe.html" class="btn-blue">สมัครสมาชิก</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h1 id="welcome-text">ยินดีต้อนรับ</h1>
+        <p>ศูนย์รวมการ์ดเกมที่ใหญ่ที่สุด</p>
+    </header>
+
+    <main class="container">
+        <div class="daily-reward" id="daily-section">
+            <h3>🎁 เช็คอินรายวัน</h3>
+            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">สุ่มรับเหรียญทอง และเพชรฟรีทุกวัน!</p>
+            <button id="spin-btn" class="btn-spin" onclick="claimDailyReward()">กดสุ่มรับแต้มนำโชค!</button>
+        </div>
+
+        <div class="quick-gacha-banner" onclick="window.location.href='Banner Selection.html'">
+            <h3>🎰 สุ่มการ์ดนำโชค</h3>
+            <span style="background: black; color: white; padding: 12px 25px; border-radius: 50px; font-weight: bold;">ไปหน้าสุ่มการ์ด →</span>
+        </div>
+
+        <h2>การ์ดเกมที่ขายในร้าน</h2>
+        <div class="grid" id="game-grid">
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRapA_9lF4_S2ZmdrmfEsY1UbKiMtnWJFXww&s" class="card-img">
+                <div style="padding:20px;"><h3>Battle of Talingchan</h3><p>Coming Soon</p></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="adminPanel">
+        <h3 style="color: #ff4747;">🛠 Admin Control</h3>
+        <button onclick="window.location.href='admin_dashboard.html'" style="width: 100%; background: #ff4747; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: bold;">ไปหน้าจัดการระบบ</button>
+        <button onclick="toggleAdmin()" style="margin-top:10px; width:100%;">ปิด</button>
+    </div>
+
+    <script>
+        window.onload = function() {
+            checkDailyReset(); 
+            initApp();
+            setupProfileActions();
+        };
+
+        function initApp() {
+            const activeUser = localStorage.getItem("registeredUser") || localStorage.getItem("currentUser") || "Guest";
+            
+            // ดึงแต้มจาก Storage (เหรียญทอง)
+            let points = localStorage.getItem(`points_${activeUser}`);
+            if (points === null) {
+                points = "5000"; 
+                localStorage.setItem(`points_${activeUser}`, points);
+            }
+
+            // --- ส่วนที่เพิ่ม: ระบบจัดการหน่วยเงินเพชร ---
+            let diamonds = localStorage.getItem(`diamonds_${activeUser}`);
+            if (diamonds === null) {
+                diamonds = "0"; // เริ่มต้นที่ 0 เพชร
+                localStorage.setItem(`diamonds_${activeUser}`, diamonds);
+            }
+
+            if (activeUser !== "Guest") {
+                document.getElementById("profile-container").style.display = "flex"; 
+                
+                // --- ส่วนที่เพิ่ม: ปรับการแสดงผลแถบเมนูให้มีเพชร 💎 ---
+                document.getElementById("user-display").innerHTML = `
+                    ${activeUser} | 🪙 ${parseInt(points).toLocaleString()} | <span style="color:#00e5ff">💎 ${parseInt(diamonds).toLocaleString()}</span>
+                `;
+
+                document.getElementById("nav-avatar-img").src = `https://ui-avatars.com/api/?background=333&color=ffc831&name=${activeUser}`;
+                document.getElementById("auth-btn").innerText = "ออกจากระบบ";
+                document.getElementById("auth-btn").onclick = logout;
+                document.getElementById("reg-item").style.display = "none";
+                document.getElementById("redeem-tab").style.display = "block"; 
+                document.getElementById("daily-section").style.display = "block";
+
+                if (localStorage.getItem(`lastClaim_${activeUser}`)) {
+                    document.getElementById("spin-btn").disabled = true;
+                    document.getElementById("spin-btn").innerText = "วันนี้คุณรับไปแล้ว ✓";
+                }
+            }
+        }
+
+        function claimDailyReward() {
+            const user = localStorage.getItem("registeredUser") || localStorage.getItem("currentUser");
+            if (!user || user === "Guest") return alert("กรุณาเข้าสู่ระบบก่อน");
+
+            // สุ่มเหรียญทอง
+            const luckyPoint = Math.floor(Math.random() * 2000) + 500;
+            
+            // --- ส่วนที่เพิ่ม: สุ่มรับเพชร (1-5 เม็ด) ---
+            const luckyDiamond = Math.floor(Math.random() * 5) + 1; 
+
+            let currentPoints = parseInt(localStorage.getItem(`points_${user}`)) || 0;
+            let currentDiamonds = parseInt(localStorage.getItem(`diamonds_${user}`)) || 0;
+            
+            currentPoints += luckyPoint;
+            currentDiamonds += luckyDiamond;
+
+            localStorage.setItem(`points_${user}`, currentPoints);
+            localStorage.setItem(`diamonds_${user}`, currentDiamonds);
+            localStorage.setItem(`lastClaim_${user}`, "done");
+            
+            // --- ส่วนที่เพิ่ม: แจ้งเตือนรางวัลแบบใหม่ ---
+            alert(`✨ เช็คอินสำเร็จ! ✨\nคุณได้รับ:\n🪙 ${luckyPoint} เหรียญทอง\n💎 ${luckyDiamond} เพชรล้ำค่า`);
+            location.reload(); 
+        }
+
+        function checkDailyReset() {
+            const activeUser = localStorage.getItem("registeredUser") || localStorage.getItem("currentUser");
+            if (!activeUser) return;
+            const today = new Date().toDateString();
+            if (localStorage.getItem(`last_visit_${activeUser}`) !== today) {
+                localStorage.removeItem(`lastClaim_${activeUser}`);
+                localStorage.setItem(`last_visit_${activeUser}`, today);
+            }
+        }
+
+        function logout() {
+            if(confirm("ออกจากระบบ?")) {
+                localStorage.removeItem("registeredUser"); 
+                localStorage.removeItem("currentUser");
+                location.reload(); 
+            }
+        }
+
+        function toggleAdmin() {
+            const panel = document.getElementById("adminPanel");
+            panel.style.display = (panel.style.display === "none") ? "block" : "none";
+        }
+
+        function setupProfileActions() {
+            let pressTimer;
+            const target = document.getElementById("profile-container");
+            if(!target) return;
+            target.addEventListener("mousedown", () => {
+                pressTimer = setTimeout(() => {
+                    const pass = prompt("Admin Password:");
+                    if (pass === "135679") toggleAdmin();
+                }, 3000);
+            });
+            target.addEventListener("mouseup", () => clearTimeout(pressTimer));
+            target.addEventListener("click", () => { if(pressTimer) window.location.href='profile.html'; });
+        }
+    </script>
+</body>
+</html>
