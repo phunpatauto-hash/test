@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Center - ล็อบบี้</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kanit', sans-serif; background: #0a0a0a; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card-panel { background: #151515; padding: 40px; border-radius: 25px; border: 1px solid #333; box-shadow: 0 20px 50px rgba(0,0,0,0.5); width: 100%; max-width: 400px; text-align: center; }
+        h1 { color: #00ff87; margin-bottom: 10px; }
+        .mode-btn { width: 100%; padding: 20px; margin: 10px 0; border: none; border-radius: 15px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-create { background: #00ff87; color: #000; }
+        .btn-join { background: #222; color: #00ff87; border: 2px solid #00ff87; }
+        .room-info { margin-top: 20px; padding: 20px; background: #000; border-radius: 15px; display: none; }
+        .id-text { font-size: 2.5rem; color: #00ff87; font-weight: bold; letter-spacing: 5px; margin: 10px 0; }
+        input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #444; background: #000; color: #fff; font-size: 1.5rem; text-align: center; margin: 15px 0; box-sizing: border-box; }
+        .btn-back { color: #888; text-decoration: none; display: block; margin-top: 20px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="card-panel">
+    <h1>🤝 Trade Center</h1>
+    <p style="color: #888;">เลือกระบบการเชื่อมต่อ</p>
+
+    <div id="lobby-menu">
+        <button class="mode-btn btn-create" onclick="startHost()">สร้างห้องแลกเปลี่ยน</button>
+        <button class="mode-btn btn-join" onclick="startJoin()">เข้าห้องด้วย ID</button>
+    </div>
+
+    <div id="host-display" class="room-info">
+        <p>ID ห้องของคุณ</p>
+        <div class="id-text" id="my-room-id">000000</div>
+        <p style="color: #00ff87; font-size: 0.8rem;">⏳ รอเพื่อนเข้าห้อง...</p>
+        <button onclick="location.reload()" style="background:none; border:none; color:#ff4747; cursor:pointer;">ยกเลิก</button>
+    </div>
+
+    <div id="join-display" class="room-info">
+        <p>กรอก ID จากเพื่อน</p>
+        <input type="number" id="input-id" placeholder="XXXXXX">
+        <button class="mode-btn btn-create" onclick="confirmJoin()">ตกลง เข้าห้อง</button>
+        <button onclick="location.reload()" style="background:none; border:none; color:#888; cursor:pointer;">กลับ</button>
+    </div>
+
+    <a href="collection.html" class="btn-back">กลับไปหน้าสมุดสะสม</a>
+</div>
+
+<script>
+    function startHost() {
+        document.getElementById('lobby-menu').style.display = 'none';
+        document.getElementById('host-display').style.display = 'block';
+        
+        // สุ่ม ID และบันทึก
+        const roomID = Math.floor(100000 + Math.random() * 900000).toString();
+        document.getElementById('my-room-id').innerText = roomID;
+        localStorage.setItem("CURRENT_TRADE_ID", roomID);
+        localStorage.setItem("TRADE_READY", "false");
+
+        // ตรวจสอบสถานะการจอย
+        const checkStatus = setInterval(() => {
+            if (localStorage.getItem("TRADE_READY") === "true") {
+                clearInterval(checkStatus);
+                window.location.href = "trade-session.html";
+            }
+        }, 1000);
+    }
+
+    function startJoin() {
+        document.getElementById('lobby-menu').style.display = 'none';
+        document.getElementById('join-display').style.display = 'block';
+    }
+
+    function confirmJoin() {
+        const inputVal = document.getElementById('input-id').value;
+        const targetID = localStorage.getItem("CURRENT_TRADE_ID");
+
+        if (inputVal === targetID) {
+            localStorage.setItem("TRADE_READY", "true");
+            window.location.href = "trade-session.html";
+        } else {
+            alert("❌ ไม่พบ ID ห้องนี้! (ตรวจสอบเลข หรือให้เพื่อนเปิดหน้านี้ค้างไว้)");
+        }
+    }
+</script>
+
+</body>
+</html>

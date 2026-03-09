@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY COLLECTION - Star & EVO Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Core Style (คงเดิมจากที่คุณส่งมา) --- */
+        * { box-sizing: border-box; }
+        body { font-family: 'Kanit', sans-serif; margin: 0; background-color: #050505; color: white; text-align: center; overflow-x: hidden; }
+        
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        .apply-shake { animation: shake 0.5s; }
+
+        @keyframes aura-glow {
+            from { box-shadow: 0 0 10px var(--aura-color), inset 0 0 5px var(--aura-color); filter: brightness(1); }
+            to { box-shadow: 0 0 25px var(--aura-color), inset 0 0 15px var(--aura-color); filter: brightness(1.3); }
+        }
+        .upgraded-aura { 
+            animation: aura-glow 1.5s infinite alternate !important; 
+            border: 2px solid var(--aura-color) !important; 
+        }
+
+        /* --- เอฟเฟกต์ดาว (เพิ่มใหม่) --- */
+        .star-glow-1 { --aura-color: #ffffff; border: 2px solid #fff !important; box-shadow: 0 0 15px #fff; }
+        .star-glow-2 { --aura-color: #00d4ff; border: 2px solid #00d4ff !important; box-shadow: 0 0 15px #00d4ff; }
+        .star-glow-3 { --aura-color: #ff00ff; border: 2px solid #ff00ff !important; box-shadow: 0 0 15px #ff00ff; }
+        .star-glow-4 { --aura-color: #ffc831; border: 2px solid #ffc831 !important; box-shadow: 0 0 15px #ffc831; }
+        .star-glow-5 { --aura-color: #ff4500; border: 2px solid #ff4500 !important; box-shadow: 0 0 15px #ff4500; }
+        .star-glow-6 { border: 2.5px solid transparent !important; background: linear-gradient(#111, #111) padding-box, linear-gradient(45deg, #ff00ff, #00d4ff, #ffea00) border-box !important; box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+
+        @keyframes rainbow-border {
+            0% { border-color: #00d4ff; box-shadow: 0 0 20px #00d4ff; }
+            33% { border-color: #ff00ff; box-shadow: 0 0 20px #ff00ff; }
+            66% { border-color: #ffc831; box-shadow: 0 0 20px #ffc831; }
+            100% { border-color: #00d4ff; box-shadow: 0 0 20px #00d4ff; }
+        }
+        @keyframes diamond-shine { 0% { left: -100%; } 100% { left: 200%; } }
+        .diamond-frame { border: 3px solid transparent !important; animation: rainbow-border 3s linear infinite !important; position: relative; overflow: hidden; }
+        .diamond-frame::after { content: ""; position: absolute; top: -50%; left: -100%; width: 50%; height: 200%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%); transform: rotate(30deg); animation: diamond-shine 2s infinite; z-index: 2; pointer-events: none; }
+
+        @keyframes evo-burn {
+            0% { border-color: #ff4500; box-shadow: 0 0 15px #ff4500, inset 0 0 10px #ff4500; }
+            50% { border-color: #ffcc00; box-shadow: 0 0 30px #ffcc00, inset 0 0 15px #ffcc00; }
+            100% { border-color: #ff4500; box-shadow: 0 0 15px #ff4500, inset 0 0 10px #ff4500; }
+        }
+        .evo-frame { border: 3px solid #ff4500 !important; animation: evo-burn 1.2s ease-in-out infinite !important; position: relative; }
+        
+        @keyframes evo-max-glow {
+            0% { border-color: #ff4500; box-shadow: 0 0 25px #ff4500, inset 0 0 15px #ff4500; filter: hue-rotate(0deg); }
+            50% { border-color: #00e5ff; box-shadow: 0 0 40px #00e5ff, inset 0 0 20px #00e5ff; filter: hue-rotate(180deg); }
+            100% { border-color: #ff4500; box-shadow: 0 0 25px #ff4500, inset 0 0 15px #ff4500; filter: hue-rotate(360deg); }
+        }
+        .evo-max-frame { border: 4px solid transparent !important; animation: evo-max-glow 3s linear infinite !important; position: relative; }
+        .ultimate-badge { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); background: linear-gradient(45deg, #ff00ff, #00d4ff); color: white; font-size: 0.65rem; font-weight: bold; padding: 2px 12px; border-radius: 10px; z-index: 10; box-shadow: 0 0 15px #00d4ff; text-transform: uppercase; border: 1px solid white; }
+        .evo-badge { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); background: linear-gradient(180deg, #ff4500, #ffcc00); color: black; font-size: 0.6rem; font-weight: bold; padding: 1px 10px; border-radius: 10px; z-index: 10; box-shadow: 0 0 10px #ff4500; }
+        .lvl-badge { position: absolute; bottom: 45px; right: 5px; background: var(--aura-color); color: #000; font-size: 0.7rem; font-weight: bold; padding: 2px 8px; border-radius: 4px; z-index: 6; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .star-tag-display { position: absolute; top: 35px; left: 8px; color: #ffea00; text-shadow: 0 0 5px black; font-size: 0.8rem; z-index: 5; letter-spacing: -1px; }
+
+        /* --- Style อื่นๆ คงเดิม --- */
+        .navbar { background-color: rgba(15, 15, 15, 0.9); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-name-tag { color: #ffc831; font-weight: bold; font-size: 0.9rem; border-left: 2px solid #333; padding-left: 10px; }
+        .nav-buttons { display: flex; gap: 8px; }
+        .btn-nav { background: #1a1a1a; color: #ffc831; border: 1px solid #ffc831; padding: 6px 12px; border-radius: 10px; text-decoration: none; font-size: 0.75rem; font-weight: bold; transition: 0.3s; cursor: pointer; }
+        .btn-nav:hover { background: #ffc831; color: #000; }
+        .btn-nav.primary { background: #ffc831; color: #000; }
+
+        .wallet-display { display: flex; gap: 10px; align-items: center; }
+        .wallet-box { background: rgba(255, 255, 255, 0.05); padding: 5px 12px; border-radius: 15px; border: 1px solid #333; display: flex; align-items: center; gap: 8px; min-width: 90px; }
+        .wallet-box.pts { border-color: #ffc831; background: rgba(255, 200, 49, 0.1); }
+        .wallet-box.dia { border-color: #00d4ff; background: rgba(0, 212, 255, 0.1); }
+
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .header-panel { background: linear-gradient(145deg, #111, #080808); padding: 20px; border-radius: 20px; border: 1px solid #222; margin-bottom: 20px; }
+        .stats-header { display: flex; justify-content: space-around; margin-bottom: 15px; }
+        .stats-header b { color: #ffc831; font-size: 1.2rem; }
+        .progress-container { background: #000; height: 10px; border-radius: 5px; overflow: hidden; border: 1px solid #222; }
+        .progress-fill { background: linear-gradient(90deg, #ffc831, #ff00ff); height: 100%; width: 0%; transition: 1s; }
+
+        .category-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin: 20px 0; scrollbar-width: none; justify-content: center; }
+        .cat-card-btn { background: #111; border: 1px solid #333; border-radius: 12px; cursor: pointer; width: 85px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; transition: 0.3s; color: #888; }
+        .cat-card-btn.active { border-color: #ffc831; background: #ffc831; color: #000; }
+
+        .collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
+        .col-card { background: #151515; border-radius: 12px; overflow: hidden; border: 1px solid #333; position: relative; transition: 0.4s; cursor: pointer; }
+        .col-card:hover { transform: translateY(-10px); }
+        .col-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; }
+
+        .duplicate-badge { position: absolute; top: 8px; right: 8px; background: #ffc831; color: #000; padding: 2px 8px; border-radius: 8px; font-weight: bold; font-size: 0.8rem; z-index: 5; }
+        .lock-badge { position: absolute; top: 8px; left: 8px; background: #ffc831; color: #000; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; z-index: 5; }
+        .rarity-tag { font-size: 0.65rem; font-weight: bold; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 4px; color: white; background: #444; }
+
+        .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); justify-content: center; align-items: center; }
+        .modal-container { position: relative; width: 90%; max-width: 400px; animation: zoomIn 0.3s; }
+        @keyframes zoomIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .btn-upgrade { background: linear-gradient(45deg, #00ff87, #60efff); color: #000; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 10px; display: none; box-shadow: 0 0 15px rgba(0,255,135,0.4); }
+        .btn-star-link { background: linear-gradient(45deg, #ffc831, #ff9000); color: #000; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 10px; display: none; box-shadow: 0 0 15px rgba(255, 200, 49, 0.4); }
+        
+        .btn-sell-all { background: linear-gradient(45deg, #ffc831, #ff9000); color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .btn-delete-all { background: linear-gradient(45deg, #ff4747, #b30000); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; margin-left: 10px; }
+        .btn-danger { background: #ff4747; color: white; border: none; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body id="main-body">
+
+    <nav class="navbar">
+        <div class="user-info">
+            <div class="nav-buttons">
+                <a href="index.html" class="btn-nav">⬅ เมนูหลัก</a>
+                <a href="profile.html" class="btn-nav">👤 โปรไฟล์</a>
+                <a href="Banner Selection.html" class="btn-nav primary">🎰 สุ่มการ์ด</a>
+                <a href="trade.html" class="btn-nav" style="border-color: #00ff87; color: #00ff87;">🤝 ระบบแลกเปลี่ยน</a>
+                <a href="evolution.html" class="btn-nav" style="border-color: #ff4500; color: #ff4500;">🧬 ระบบ EVO</a>
+                <div class="nav-buttons">
+    </div>
+            </div>
+            <span class="user-name-tag" id="display-username">Collector: Loading...</span>
+        </div>
+        <div class="wallet-display">
+            <div class="wallet-box pts">
+                <span style="color: #ffc831;">🪙</span>
+                <span id="nav-points" style="color: #ffc831; font-weight: bold; font-size: 0.9rem;">0</span>
+            </div>
+            <div class="wallet-box dia">
+                <span style="color: #00d4ff;">💎</span>
+                <span id="nav-diamonds" style="color: #00d4ff; font-weight: bold; font-size: 0.9rem;">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header-panel">
+            <h2>สมุดสะสมการ์ด (Star Awakening Edition)</h2>
+            <div class="stats-header">
+                <div>แบบที่สะสม: <b id="unique-count">0</b></div>
+                <div>ทั้งหมด: <b id="total-count">0</b></div>
+            </div>
+            <div class="progress-container"><div id="progress-fill" class="progress-fill"></div></div>
+            <div style="margin-top: 20px;">
+                <button class="btn-sell-all" onclick="sellDuplicates()">💰 ขายการ์ดซ้ำทั้งหมด (ยกเว้นที่ล็อก 🔒)</button>
+                <button class="btn-delete-all" onclick="clearEntireCollection()">🗑️ ล้างการ์ดทั้งหมดในสมุด</button>
+            </div>
+        </div>
+
+        <div class="category-scroll" id="category-bar"></div>
+        <div id="grid" class="collection-grid"></div>
+    </div>
+
+    <div id="cardModal" class="modal" onclick="closeModal()">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <img id="modalImg" style="width:100%; border-radius:20px; border:4px solid #333;">
+            <div style="background: #111; padding: 20px; border-radius: 0 0 20px 20px; border: 1px solid #333; text-align: left;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 id="modalName" style="margin: 0; color: #ffc831;">Card Name</h2>
+                    <span id="modalLevelBadge" style="background: #ffc831; color: #000; padding: 2px 8px; border-radius: 5px; font-weight: bold; font-size: 0.8rem;">LV.0</span>
+                </div>
+                <div id="modalStars" style="color:#ffea00; margin-top:5px; font-size:1.1rem;"></div>
+                <p id="modalQty" style="color: #888; margin: 15px 0 2px 0;"></p>
+                <p id="modalPrice" style="color: #ffc831; font-weight: bold; margin: 0 0 15px 0; font-size: 0.9rem;"></p>
+                
+                <button id="btn-upgrade-card" class="btn-upgrade">✨ อัปเลเวล</button>
+                <button id="btn-star-link" class="btn-star-link" onclick="location.href='star-upgrade.html'">🌟 ไปหน้าปลุกพลังดาว</button>
+                
+                <button id="btn-lock-toggle" class="btn-nav" style="width:100%; margin-bottom:10px;" onclick="toggleLock()">🔒 ล็อกการ์ด</button>
+                <button class="btn-nav primary" style="width:100%;" onclick="setAsFeatured()">✨ โชว์ที่หน้าโปรไฟล์</button>
+                
+                <button id="btn-delete-card" class="btn-danger" onclick="deleteThisCardType()">🗑️ ทิ้งการ์ดใบนี้ทั้งหมด (เฉพาะที่ไม่ได้ล็อก)</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    let currentCardKey = null;
+    let currentFilter = 'ALL';
+    const evoUpgradeCost = 100;
+    const normalUpgradeQty = 5;
+    const sellPrices = { EXR: 5000, SEC: 2000, SSR: 1000, SR: 200, R: 100, U: 50, C: 10 };
+    const rarities = [{id:'C',name:'C'},{id:'U',name:'U'},{id:'R',name:'R'},{id:'SR',name:'SR'},{id:'SSR',name:'SSR'},{id:'SEC',name:'SEC'},{id:'EXR',name:'EXR'}];
+
+    function getActiveUser() { return localStorage.getItem("registeredUser") || localStorage.getItem("currentUser") || "Guest"; }
+
+    function getLevelColor(lvl) {
+        if (lvl <= 0) return '#444'; 
+        if (lvl <= 4) return '#00d4ff'; 
+        if (lvl <= 7) return '#ff00ff'; 
+        if (lvl <= 9) return '#ffc831'; 
+        return '#ffffff';
+    }
+
+    function refreshWallet() {
+        const activeUser = getActiveUser();
+        const pts = parseInt(localStorage.getItem(`points_${activeUser}`)) || 0;
+        const dia = parseInt(localStorage.getItem(`diamonds_${activeUser}`)) || 0;
+        document.getElementById("nav-points").innerText = pts.toLocaleString();
+        document.getElementById("nav-diamonds").innerText = dia.toLocaleString();
+    }
+
+    function getData() { return JSON.parse(localStorage.getItem("myCollection")) || []; }
+    function getLocks() { return JSON.parse(localStorage.getItem("lockedCards")) || {}; }
+    function getCardLevels() { return JSON.parse(localStorage.getItem("cardLevels")) || {}; }
+
+    function render(filter = 'ALL') {
+        currentFilter = filter;
+        const activeUser = getActiveUser();
+        document.getElementById("display-username").innerText = "Collector: " + activeUser;
+        
+        const data = getData();
+        const locks = getLocks();
+        const levels = getCardLevels(); 
+        const grid = document.getElementById("grid");
+        grid.innerHTML = "";
+
+        const stats = { ALL: 0 };
+        const counts = {};
+        
+        data.forEach(card => {
+            const key = card.name + card.rarity;
+            if (!counts[key]) { 
+                counts[key] = { ...card, qty: 1, key: key };
+                stats[card.rarity] = (stats[card.rarity] || 0) + 1;
+                stats.ALL++;
+            } else { counts[key].qty += 1; }
+        });
+
+        rarities.forEach(r => { if(!stats[r.id]) stats[r.id] = 0; });
+
+        const bar = document.getElementById("category-bar");
+        bar.innerHTML = `<div class="cat-card-btn ${filter==='ALL'?'active':''}" onclick="render('ALL')"><b>🏠</b><span>ทั้งหมด</span></div>`;
+        rarities.forEach(r => {
+            bar.innerHTML += `<div class="cat-card-btn ${filter===r.id?'active':''}" onclick="render('${r.id}')"><b>${r.name}</b><span>${stats[r.id]}</span></div>`;
+        });
+
+        const uniqueCards = Object.values(counts);
+        const displayCards = filter === 'ALL' ? uniqueCards : uniqueCards.filter(c => c.rarity === filter);
+
+        displayCards.reverse().forEach(card => {
+            const lvl = levels[card.key] !== undefined ? levels[card.key] : 0;
+            const stars = card.stars || 0;
+            const auraColor = getLevelColor(lvl);
+            const cardEl = document.createElement("div");
+            
+            let isEvo = card.isEvo || card.name.includes("[EVO]") || (card.rarity && card.rarity.includes("EVO"));
+            
+            // ลำดับ Class พิเศษ
+            let specialClass = "";
+            if (stars > 0) specialClass = `star-glow-${stars}`;
+            else if (isEvo && lvl >= 10) specialClass = "evo-max-frame";
+            else if (isEvo) specialClass = "evo-frame";
+            else if (lvl === 10) specialClass = "diamond-frame";
+            else if (lvl > 0) specialClass = "upgraded-aura";
+
+            cardEl.className = `col-card ${specialClass}`;
+            cardEl.style.setProperty('--aura-color', auraColor);
+            cardEl.onclick = () => openModal({...card, isEvo: isEvo, qty: card.qty, stars: stars});
+            
+            cardEl.innerHTML = `
+                ${card.qty > 1 ? `<div class="duplicate-badge">x${card.qty}</div>` : ''}
+                ${locks[card.key] ? `<div class="lock-badge">🔒</div>` : ''}
+                ${stars > 0 ? `<div class="star-tag-display">${"★".repeat(stars)}</div>` : ''}
+                ${isEvo && lvl >= 10 ? `<div class="ultimate-badge">ULTIMATE</div>` : (isEvo ? `<div class="evo-badge">EVOLVED</div>` : '')}
+                <div class="lvl-badge" style="background:${lvl === 10 ? 'linear-gradient(45deg, #00d4ff, #ff00ff)' : auraColor}; color: ${lvl === 0 ? '#fff' : '#000'}">LV.${lvl}</div>
+                <img src="${card.img}">
+                <div style="padding:8px; text-align:left;">
+                    <span style="font-size:0.7rem; color:#888;">${card.name}</span><br>
+                    <span class="rarity-tag" style="${isEvo ? 'background:#ff4500' : ''}">${card.rarity}</span>
+                </div>
+            `;
+            grid.appendChild(cardEl);
+        });
+
+        document.getElementById("unique-count").innerText = stats.ALL;
+        document.getElementById("total-count").innerText = data.length;
+        document.getElementById("progress-fill").style.width = (Math.min(stats.ALL, 100)) + "%";
+        refreshWallet();
+    }
+
+    function openModal(card) {
+        currentCardKey = card.key;
+        const levels = getCardLevels();
+        const activeUser = getActiveUser();
+        const currentLvl = levels[card.key] || 0;
+        const isEvo = card.isEvo;
+        const userDiamonds = parseInt(localStorage.getItem(`diamonds_${activeUser}`)) || 0;
+
+        const modalImg = document.getElementById("modalImg");
+        modalImg.src = card.img;
+        
+        // เอฟเฟกต์รูปใน Modal
+        if (card.stars > 0) modalImg.className = `star-glow-${card.stars}`;
+        else if (isEvo && currentLvl >= 10) modalImg.className = "evo-max-frame";
+        else if (isEvo) modalImg.className = "evo-frame";
+        else if (currentLvl === 10) modalImg.className = "diamond-frame";
+        else modalImg.className = "";
+
+        document.getElementById("modalName").innerText = card.name;
+        document.getElementById("modalStars").innerText = card.stars > 0 ? "★".repeat(card.stars) + " (Star Awakened)" : "";
+        document.getElementById("modalQty").innerText = `คุณมีการ์ดนี้ทั้งหมด ${card.qty} ใบ`;
+        document.getElementById("modalPrice").innerText = `💰 ราคาขายคืน: ${(sellPrices[card.rarity] || 10).toLocaleString()} แต้ม / ใบ`;
+        
+        const badge = document.getElementById("modalLevelBadge");
+        badge.innerText = `LV.${currentLvl}${isEvo ? ' (EVO)' : ''}`;
+        badge.style.background = getLevelColor(currentLvl);
+        badge.style.color = currentLvl === 0 ? "#fff" : "#000";
+
+        const btnUpgrade = document.getElementById("btn-upgrade-card");
+        const btnStarLink = document.getElementById("btn-star-link");
+
+        // Logic ปุ่ม Upgrade และ Star Evolution
+        if (currentLvl < 10) {
+            btnUpgrade.style.display = "block";
+            btnStarLink.style.display = "none";
+            if (isEvo) {
+                if (userDiamonds >= evoUpgradeCost) {
+                    btnUpgrade.innerText = `🧬 อัป LV. ร่าง EVO (ใช้ ${evoUpgradeCost} 💎)`;
+                    btnUpgrade.style.background = "linear-gradient(45deg, #00d4ff, #ff00ff)";
+                    btnUpgrade.onclick = upgradeCard; 
+                } else {
+                    btnUpgrade.innerText = `❌ เพชรไม่พอ (ขาดอีก ${evoUpgradeCost - userDiamonds} 💎)`;
+                    btnUpgrade.style.background = "#444";
+                    btnUpgrade.onclick = null;
+                }
+            } else {
+                if (card.qty >= (normalUpgradeQty + 1)) {
+                    btnUpgrade.innerText = `✨ อัปเลเวล (ใช้การ์ดซ้ำ ${normalUpgradeQty} ใบ)`;
+                    btnUpgrade.style.background = "linear-gradient(45deg, #00ff87, #60efff)";
+                    btnUpgrade.onclick = upgradeCard;
+                } else {
+                    btnUpgrade.innerText = `❌ ขาดการ์ดซ้ำอีก ${(normalUpgradeQty + 1) - card.qty} ใบ`;
+                    btnUpgrade.style.background = "#444";
+                    btnUpgrade.onclick = null;
+                }
+            }
+        } else {
+            btnUpgrade.style.display = "none";
+            // ถ้าเวล 10 และเป็นสาย EVO ให้โชว์ปุ่มไปหน้าปลุกพลังดาว
+            if (isEvo && card.stars < 6) {
+                btnStarLink.style.display = "block";
+            } else {
+                btnStarLink.style.display = "none";
+            }
+        }
+
+        const locks = getLocks();
+        document.getElementById("btn-lock-toggle").innerText = locks[currentCardKey] ? "🔓 ปลดล็อก" : "🔒 ล็อกการ์ด";
+        document.getElementById("cardModal").style.display = "flex";
+    }
+
+    function upgradeCard() {
+        const activeUser = getActiveUser();
+        let data = getData();
+        let levels = getCardLevels();
+        const currentLvl = levels[currentCardKey] || 0;
+        const cardData = data.find(c => (c.name + c.rarity) === currentCardKey);
+        const isEvo = cardData && (cardData.isEvo || cardData.name.includes("[EVO]"));
+
+        if (isEvo) {
+            let currentDiamonds = parseInt(localStorage.getItem(`diamonds_${activeUser}`)) || 0;
+            if (currentDiamonds < evoUpgradeCost) return alert("เพชรไม่พอ!");
+            if (confirm(`ใช้ ${evoUpgradeCost} เพชร เพื่ออัปเลเวลการ์ด EVO เป็น LV.${currentLvl + 1}?`)) {
+                localStorage.setItem(`diamonds_${activeUser}`, currentDiamonds - evoUpgradeCost);
+                levels[currentCardKey] = currentLvl + 1;
+                localStorage.setItem("cardLevels", JSON.stringify(levels));
+                alert("🧬 วิวัฒนาการพลังสำเร็จ!");
+                render(currentFilter); closeModal();
+            }
+        } else {
+            const matchingCards = data.filter(c => (c.name + c.rarity) === currentCardKey);
+            if (matchingCards.length < (normalUpgradeQty + 1)) return alert("การ์ดซ้ำไม่พอ!");
+            if (confirm(`ใช้การ์ดซ้ำ ${normalUpgradeQty} ใบ เพื่ออัปเกรดเป็น LV.${currentLvl + 1}?`)) {
+                let removedCount = 0;
+                for (let i = data.length - 1; i >= 0; i--) {
+                    if ((data[i].name + data[i].rarity) === currentCardKey && removedCount < normalUpgradeQty) {
+                        data.splice(i, 1); removedCount++;
+                    }
+                }
+                levels[currentCardKey] = currentLvl + 1;
+                localStorage.setItem("myCollection", JSON.stringify(data));
+                localStorage.setItem("cardLevels", JSON.stringify(levels));
+                alert("✨ อัปเลเวลสำเร็จ!");
+                render(currentFilter); closeModal();
+            }
+        }
+    }
+
+    function closeModal() { document.getElementById("cardModal").style.display = "none"; }
+    
+    function sellDuplicates() {
+        const activeUser = getActiveUser();
+        let data = getData();
+        const locks = getLocks();
+        let totalPointsGain = 0;
+        let newData = [];
+        let cardGroups = {};
+
+        data.forEach(card => {
+            const key = card.name + card.rarity;
+            if(!cardGroups[key]) cardGroups[key] = [];
+            cardGroups[key].push(card);
+        });
+
+        for (let key in cardGroups) {
+            let group = cardGroups[key];
+            if (locks[key] || group.length <= 1) {
+                newData.push(...group);
+            } else {
+                newData.push(group[0]);
+                let duplicates = group.length - 1;
+                let price = sellPrices[group[0].rarity] || 10;
+                totalPointsGain += (duplicates * price);
+            }
+        }
+
+        if (totalPointsGain > 0) {
+            if (confirm(`ขายการ์ดซ้ำได้รับ ${totalPointsGain.toLocaleString()} แต้ม ยืนยันหรือไม่?`)) {
+                let currentPts = parseInt(localStorage.getItem(`points_${activeUser}`)) || 0;
+                localStorage.setItem(`points_${activeUser}`, currentPts + totalPointsGain);
+                localStorage.setItem("myCollection", JSON.stringify(newData));
+                render(currentFilter);
+            }
+        } else { alert("ไม่มีการ์ดซ้ำให้ขาย"); }
+    }
+
+    function toggleLock() {
+        let locks = getLocks();
+        locks[currentCardKey] = !locks[currentCardKey];
+        localStorage.setItem("lockedCards", JSON.stringify(locks));
+        render(currentFilter);
+        document.getElementById("btn-lock-toggle").innerText = locks[currentCardKey] ? "🔓 ปลดล็อก" : "🔒 ล็อกการ์ด";
+    }
+
+    function setAsFeatured() {
+        const data = getData();
+        const card = data.find(c => (c.name + c.rarity) === currentCardKey);
+        if (card) {
+            localStorage.setItem("featuredCard", JSON.stringify(card));
+            alert("ตั้งเป็นการ์ดโชว์หน้าโปรไฟล์แล้ว!");
+        }
+    }
+
+    function clearEntireCollection() {
+        if (confirm("⚠️ ล้างการ์ดทั้งหมดในสมุดใช่หรือไม่?")) {
+            localStorage.removeItem("myCollection");
+            localStorage.removeItem("cardLevels");
+            localStorage.removeItem("lockedCards");
+            render();
+        }
+    }
+
+    function deleteThisCardType() {
+        let data = getData();
+        const locks = getLocks();
+        if (locks[currentCardKey]) return alert("การ์ดนี้ถูกล็อกอยู่!");
+        if (confirm("ทิ้งการ์ดชนิดนี้ทั้งหมดใช่หรือไม่?")) {
+            const newData = data.filter(c => (c.name + c.rarity) !== currentCardKey);
+            localStorage.setItem("myCollection", JSON.stringify(newData));
+            closeModal(); render(currentFilter);
+        }
+    }
+
+    window.onload = function() { render(); };
+</script>
+</body>
+</html>
